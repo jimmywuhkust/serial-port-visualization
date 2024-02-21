@@ -13,6 +13,8 @@ function App() {
   
       const reader = port.readable.getReader();
       let buffer = '';
+      let temp = ''; // Temporary variable to store accumulated lines
+      let line = '';
   
       while (true) {
         const { value, done } = await reader.read();
@@ -20,20 +22,27 @@ function App() {
           reader.releaseLock();
           break;
         }
-
+        
         // Convert Uint8Array to hexadecimal string
         const hexString = Array.from(new Uint8Array(value))
           .map(byte => byte.toString(16).padStart(2, '0'))
           .join('');
-
+        
         buffer += hexString;
-
+        
         // Check if buffer has at least 8 bytes
-        while (buffer.length >= 16) {
-          const eightBytes = buffer.substring(0, 16);
+        while (buffer.length >= 2) {
+          const eightBytes = buffer.substring(0, 2);
           const stringValue = hexToString(eightBytes); // Convert hexadecimal string to string
-          setData(prevData => prevData + stringValue);
-          buffer = buffer.substring(16); // Remove processed bytes from buffer
+          line += stringValue;
+          buffer = buffer.substring(2); // Remove processed bytes from buffer
+          
+          // Check for newline character
+          if (stringValue.includes('\n')) {
+            temp += line + '\n'; // Store the line in temp
+            setData(line); // Update the data state
+            line = ''; // Reset line
+          }
         }
       }
     } catch (error) {
