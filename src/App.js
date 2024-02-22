@@ -68,9 +68,12 @@ function App() {
       const [accX, accY, accZ, gyroX, gyroY, gyroZ] = values;
 
       // Update text position and rotation based on accelerometer and gyroscope readings
-      imuText.current.rotation.x = gyroY * Math.PI / 180;
-      imuText.current.rotation.y = gyroZ * Math.PI / 180;
-      imuText.current.rotation.z = gyroX * Math.PI / 180;
+      // imuText.current.rotation.x = gyroY * Math.PI / 180;
+      // imuText.current.rotation.y = gyroZ * Math.PI / 180;
+      // imuText.current.rotation.z = gyroX * Math.PI / 180;
+      imuText.current.rotation.x = gyroY;
+      imuText.current.rotation.y = gyroZ;
+      imuText.current.rotation.z = gyroX;
       // Optionally, you can also adjust position based on accelerometer data
       // imuText.current.position.x = accX;
       // imuText.current.position.y = accY;
